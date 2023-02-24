@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
@@ -12,8 +13,10 @@ class InCompletePage extends StatefulWidget {
 }
 
 class _InCompletePageState extends State<InCompletePage> {
-  final CollectionReference _todos =
-      FirebaseFirestore.instance.collection('todos');
+  final CollectionReference _todos = FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection('todos');
 
   String keywordSearch = "";
 
@@ -126,7 +129,11 @@ class _InCompletePageState extends State<InCompletePage> {
   }
 
   void _handleToDoChange(ToDo toDo) {
-    final docTodo = FirebaseFirestore.instance.collection('todos').doc(toDo.id);
+    final docTodo = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('todos')
+        .doc(toDo.id);
     docTodo.update({'isDone': !toDo.isDone});
   }
 }

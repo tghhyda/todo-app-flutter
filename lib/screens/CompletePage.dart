@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,8 +13,10 @@ class CompletedPage extends StatefulWidget {
 }
 
 class _CompletedPageState extends State<CompletedPage> {
-  final CollectionReference _todos =
-      FirebaseFirestore.instance.collection('todos');
+  final CollectionReference _todos = FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection('todos');
 
   String keywordSearch = "";
 
@@ -126,7 +129,11 @@ class _CompletedPageState extends State<CompletedPage> {
   }
 
   void _handleToDoChange(ToDo toDo) {
-    final docTodo = FirebaseFirestore.instance.collection('todos').doc(toDo.id);
+    final docTodo = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('todos')
+        .doc(toDo.id);
     docTodo.update({'isDone': !toDo.isDone});
   }
 }

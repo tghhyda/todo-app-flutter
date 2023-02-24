@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app_flutter/constants/colors.dart';
 import 'package:todo_app_flutter/model/ToDo.dart';
+import 'package:todo_app_flutter/screens/LoginPage.dart';
 import 'package:todo_app_flutter/widgets/todo_item.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -15,9 +17,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final _toDoController = TextEditingController();
-  final CollectionReference _todos =
-      FirebaseFirestore.instance.collection('todos');
+  final user = FirebaseAuth.instance.currentUser!;
 
+  final CollectionReference _todos = FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser!.email)
+      .collection('todos');
   String keywordSearch = "";
 
   @override
@@ -158,23 +163,34 @@ class _HomeState extends State<Home> {
 
   Future createToDo({required todoText}) async {
     final docToDo = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.email)
         .collection('todos')
         .doc(DateTime.now().microsecondsSinceEpoch.toString());
 
     final ToDo toDo = ToDo(id: docToDo.id, isDone: false, todoText: todoText);
     final json = toDo.toJson();
+    if (toDo.todoText == "") return null;
     await docToDo.set(json);
 
     _toDoController.clear();
   }
 
   void _handleToDoChange(ToDo toDo) {
-    final docTodo = FirebaseFirestore.instance.collection('todos').doc(toDo.id);
+    final docTodo = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.email)
+        .collection('todos')
+        .doc(toDo.id);
     docTodo.update({'isDone': !toDo.isDone});
   }
 
   void _deleteToDoItem(String id) {
-    final docTodo = FirebaseFirestore.instance.collection('todos').doc(id);
+    final docTodo = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.email)
+        .collection('todos')
+        .doc(id);
     docTodo.delete();
   }
 
@@ -218,8 +234,10 @@ class _HomeState extends State<Home> {
           Container(
             height: 40,
             width: 40,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+            child: ElevatedButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
               child: Image.asset('assets/images/avatar.jpg'),
             ),
           )

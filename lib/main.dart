@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_app_flutter/constants/colors.dart';
 import 'package:todo_app_flutter/provider/navigation_provider.dart';
+import 'package:todo_app_flutter/screens/LoginPage.dart';
 import 'package:todo_app_flutter/screens/home.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -27,7 +30,32 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: Home()),
+          home: MainPage()),
     );
   }
 }
+
+class MainPage extends StatelessWidget {
+  const MainPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: tdBGColor,
+        body: StreamBuilder(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot){
+              if(snapshot.connectionState == ConnectionState.waiting){
+                return Center(child: CircularProgressIndicator());
+              }else if(snapshot.hasError){
+                return Center(child: Text("Something went wrong"),);
+              } else if(snapshot.hasData)
+                return Home();
+              else
+                return LoginPage();
+            }
+        )
+    );
+  }
+}
+
