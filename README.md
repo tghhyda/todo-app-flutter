@@ -1,7 +1,11 @@
 TodoList using Flutter and Firebase
+
 Usecase:
+
     + Crud Todo
+    
     + Login, Logout
+    
     + Reset password by send to email
 
 Screens:
