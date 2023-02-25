@@ -39,4 +39,8 @@ InComplete Todo Screen:
 Completed Todo Screen:
 
 ![CompletePage](https://user-images.githubusercontent.com/102457174/221350272-f978d682-640e-44d1-a858-f147a842ce29.png)
+
+Reset password Screen:
+
+![ResetPasswordPage](https://user-images.githubusercontent.com/102457174/221351433-8dcb22f6-c501-49a9-bb45-31c9d171be08.png)
     
