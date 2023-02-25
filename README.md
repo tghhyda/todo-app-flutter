@@ -4,6 +4,8 @@ Usecase:
 
     + Crud Todo
     
+    + Search/Filter todos
+    
     + Login, Logout
     
     + Reset password by send to email
