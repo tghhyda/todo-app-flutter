@@ -10,6 +10,4 @@ Usecase:
 
 Screens:
 Login:
-    <p>
-        <img src="https://drive.google.com/file/d/1krItkgOoht1RS-rTPyMryfOWmsCPrYvs/view?usp=sharing", alt=""/>
-    </p>
+    ![alt text](https://drive.google.com/file/d/1krItkgOoht1RS-rTPyMryfOWmsCPrYvs/view?usp=share_link)
