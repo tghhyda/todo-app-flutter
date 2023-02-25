@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:todo_app_flutter/constants/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todo_app_flutter/model/User.dart';
+import 'package:todo_app_flutter/screens/LoginPage.dart';
 
+import '../main.dart';
 import 'home.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -16,6 +18,8 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +47,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
               const Text(
-                "Login below",
+                "Sign up below",
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 44.0,
@@ -68,8 +72,23 @@ class _SignUpPageState extends State<SignUpPage> {
               TextField(
                 controller: passwordController,
                 obscureText: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
+                    errorText: _errorText,
                     hintText: "User password",
+                    prefixIcon: Icon(
+                      Icons.lock,
+                      color: Colors.black,
+                    )),
+              ),
+              const SizedBox(
+                height: 26,
+              ),
+              TextField(
+                controller: confirmPasswordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                    errorText: _confirmErrorText,
+                    hintText: "User confirm password",
                     prefixIcon: Icon(
                       Icons.lock,
                       color: Colors.black,
@@ -96,24 +115,55 @@ class _SignUpPageState extends State<SignUpPage> {
               const SizedBox(
                 height: 24.0,
               ),
+              signInOption()
             ],
           ),
         ));
   }
 
+  String? get _errorText {
+    final passwordText = passwordController.text.trim();
+
+    if (passwordText.length < 6) {
+      return 'The length of password must be more than 5';
+    }
+    return null;
+  }
+
+  String? get _confirmErrorText {
+    final passwordText = passwordController.text.trim();
+    final confirmText = confirmPasswordController.text.trim();
+
+    if (!isSame(passwordText, confirmText)) {
+      return 'The password and confirm password is not match';
+    }
+    return null;
+  }
+
   Future signUp() async {
+    showDialog(context: context,
+        barrierDismissible: false,
+        builder: (context) => Center(child: CircularProgressIndicator(),));
     try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: emailController.text.trim(),
-              password: passwordController.text.trim())
-          .then((value) => addUserDetails(
-              emailController.text.trim(), passwordController.text.trim()))
-          .then((value) => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Home())));
+      if (_errorText == null && _confirmErrorText == null) {
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: emailController.text.trim(),
+                password: passwordController.text.trim())
+            .then((value) => addUserDetails(
+                emailController.text.trim(), passwordController.text.trim()))
+            .then((value) => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => MainPage())));
+      }else
+        setState(() {});
     } on FirebaseAuthException catch (e) {
       print(e);
     }
+  }
+
+  bool isSame(String password, String confirm) {
+    if (password == confirm) return true;
+    return false;
   }
 
   Future addUserDetails(String email, String password) async {
@@ -122,5 +172,24 @@ class _SignUpPageState extends State<SignUpPage> {
     final Users user = Users(email: email, password: password);
     final json = user.toJson();
     await docUser.set(json);
+  }
+
+  Row signInOption() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text("Already have account?",
+            style: TextStyle(color: Colors.blue)),
+        GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: const Text(
+            " Login",
+            style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    );
   }
 }

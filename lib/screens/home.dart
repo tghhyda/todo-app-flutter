@@ -232,13 +232,14 @@ class _HomeState extends State<Home> {
         children: [
           Container(),
           Container(
-            height: 40,
-            width: 40,
             child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(tdBGColor)
+              ),
               onPressed: () {
                 FirebaseAuth.instance.signOut();
               },
-              child: Image.asset('assets/images/avatar.jpg'),
+              child: Icon(Icons.logout, color: Colors.black,)
             ),
           )
         ],

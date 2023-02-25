@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app_flutter/constants/colors.dart';
+import 'package:todo_app_flutter/screens/ForgotPasswordPage.dart';
 import 'package:todo_app_flutter/screens/SignUpPage.dart';
 
 import '../main.dart';
@@ -14,6 +15,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  String errorMessage = '';
 
   @override
   void dispose() {
@@ -73,14 +75,38 @@ class _LoginPageState extends State<LoginPage> {
                 )),
           ),
           const SizedBox(
-            height: 15.0,
+            height: 10,
           ),
-          const Text(
-            "Don't remember your password?",
-            style: TextStyle(color: Colors.blue),
+          Center(
+            child: Text(
+              errorMessage,
+              style: TextStyle(color: Colors.red),
+            ),
           ),
           const SizedBox(
-            height: 50.0,
+            height: 5.0,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(),
+              GestureDetector(
+                child: Text(
+                  'Forgot password?',
+                  style: TextStyle(
+                      color: Colors.blueAccent,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ForgotPasswordPage()));
+                },
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 40.0,
           ),
           Container(
             width: double.infinity,
@@ -111,8 +137,10 @@ class _LoginPageState extends State<LoginPage> {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim());
+      errorMessage = '';
     } on FirebaseAuthException catch (e) {
-      print(e);
+      errorMessage = e.message!;
+      setState(() {});
     }
   }
 
@@ -120,8 +148,7 @@ class _LoginPageState extends State<LoginPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text("Don't have account?",
-            style: TextStyle(color: Colors.blue)),
+        const Text("Don't have account?", style: TextStyle(color: Colors.blue)),
         GestureDetector(
           onTap: () {
             Navigator.push(
