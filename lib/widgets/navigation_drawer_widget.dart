@@ -5,7 +5,6 @@ import 'package:todo_app_flutter/provider/navigation_provider.dart';
 
 import '../screens/CompletePage.dart';
 import '../screens/InCompletePage.dart';
-import '../screens/home.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
 
@@ -68,12 +67,9 @@ class NavigationDrawerWidget extends StatelessWidget {
     push(MaterialPageRoute(builder: (context) => page));
     switch(index){
       case 0:
-        navigateTo(Home());
-        break;
-      case 1:
         navigateTo(CompletedPage());
         break;
-      case 2:
+      case 1:
         navigateTo(InCompletePage());
     }
   }

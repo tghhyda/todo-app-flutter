@@ -15,7 +15,7 @@ class InCompletePage extends StatefulWidget {
 class _InCompletePageState extends State<InCompletePage> {
   final CollectionReference _todos = FirebaseFirestore.instance
       .collection('users')
-      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .doc(FirebaseAuth.instance.currentUser!.email)
       .collection('todos');
 
   String keywordSearch = "";
@@ -131,7 +131,7 @@ class _InCompletePageState extends State<InCompletePage> {
   void _handleToDoChange(ToDo toDo) {
     final docTodo = FirebaseFirestore.instance
         .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .doc(FirebaseAuth.instance.currentUser!.email)
         .collection('todos')
         .doc(toDo.id);
     docTodo.update({'isDone': !toDo.isDone});

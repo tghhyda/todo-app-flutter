@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: MainPage()),
+          home: const MainPage()),
     );
   }
 }
@@ -42,7 +42,7 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: tdBGColor,
-        body: StreamBuilder(
+        body: StreamBuilder<User?>(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot){
               if(snapshot.connectionState == ConnectionState.waiting){
