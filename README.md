@@ -15,7 +15,6 @@ https://drive.google.com/file/d/1T378BFwd76UXUzrW6qURc7H4mYtzgdhC/view?usp=share
 Screens:
 
     Homepage:
-
     ![Homepage](https://user-images.githubusercontent.com/102457174/221350123-4c249a65-21ec-4139-8ab5-c57cc9cca2af.png)
     Login:
     ![LoginPage](https://user-images.githubusercontent.com/102457174/221350175-ddcfaa85-1576-425f-9d7a-27d18e325644.png)
